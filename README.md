@@ -1,5 +1,5 @@
 requires node version 20
 
-run `npm i`
-run `npm run dev` or `npm run start`
-open `http://localhost:5173/`
+1. run `npm i`
+2. run `npm run dev` or `npm run start`
+3. open `http://localhost:5173/`
