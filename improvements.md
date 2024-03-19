@@ -9,3 +9,4 @@
 - better error handling (also tightly coupled currently)
 - obviously the txt file parsing is garbage at the moment (very brittle, lots of assumptions about the data, bunch of loops)
 - better download functionality instead of imperatively creating DOM nodes
+- didn't really pay attention to rerenders. I'm sure there are some `useMemo()'s` and `useCallbacks()'s` that could be used
