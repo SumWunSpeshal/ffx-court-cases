@@ -1,0 +1,11 @@
+- styling
+- more and better component extraction
+- not satisfied with how tightly coupled the `form` components are
+- "Success"-page should be a toast message instead of its own form step.
+- better routing for form progression steps. Currently just tied to control flow (if/else). Maybe even use URL params?
+- form validation. Currently only checks property presence and truthiness of value.
+- txt file validation
+- loading states
+- better error handling (also tightly coupled currently)
+- obviously the txt file parsing is garbage at the moment (very brittle, lots of assumptions about the data, bunch of loops)
+- better download functionality instead of imperatively creating DOM nodes
