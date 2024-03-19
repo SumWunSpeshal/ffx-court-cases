@@ -1,6 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "../components/Button";
+import { Container } from "../components/Container";
 import { Dialog } from "../components/Dialog";
 import {
   CustomerNameForm,
@@ -51,63 +52,67 @@ function Index() {
 
   function isFinishedSubmit({ isFinished }: FinishedFormPayload) {
     setForm((prev) => ({ ...prev, isFinished }));
-  }
 
-  useEffect(() => {
-    if (validate(form)) {
-      setCases((prev) => [...prev, form]);
+    const newState = { ...form, isFinished };
+
+    if (validate(newState)) {
+      setCases((prev) => [...prev, newState]);
     }
-  }, [form, setCases]);
+  }
 
   return (
     <>
-      <div className="p-2">
-        <h3>Create a new case!</h3>
+      <div className="pt-4">
+        <Container>
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold">Create a new case</h1>
+          </div>
+          <Button onClick={() => setDialogOpen(true)} type="button">
+            Add new case
+          </Button>
+          <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+            {(() => {
+              if ("isFinished" in form) {
+                return (
+                  <div className="grid gap-4">
+                    <div>Success! New case has been added!</div>
+                    <div className="flex justify-center">
+                      <Button type="button" onClick={() => setForm({})}>
+                        Add new
+                      </Button>
+                    </div>
+                  </div>
+                );
+              }
+
+              if ("startDate" in form) {
+                return (
+                  <FinishedForm
+                    onSubmit={isFinishedSubmit}
+                    value={form.isFinished}
+                  />
+                );
+              }
+
+              if ("customerName" in form) {
+                return (
+                  <StartDateForm
+                    onSubmit={startDateSubmit}
+                    value={form.startDate}
+                  />
+                );
+              }
+
+              return (
+                <CustomerNameForm
+                  onSubmit={customerNameSubmit}
+                  value={form.customerName}
+                />
+              );
+            })()}
+          </Dialog>
+        </Container>
       </div>
-      <Button onClick={() => setDialogOpen(true)} type="button">
-        Add new case
-      </Button>
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        {(() => {
-          if ("isFinished" in form) {
-            return (
-              <div className="grid gap-4">
-                <div>Success! New case has been added!</div>
-                <div className="flex justify-center">
-                  <Button type="button" onClick={() => setForm({})}>
-                    Add new
-                  </Button>
-                </div>
-              </div>
-            );
-          }
-
-          if ("startDate" in form) {
-            return (
-              <FinishedForm
-                onSubmit={isFinishedSubmit}
-                value={form.isFinished}
-              />
-            );
-          }
-
-          if ("customerName" in form) {
-            return (
-              <StartDateForm
-                onSubmit={startDateSubmit}
-                value={form.startDate}
-              />
-            );
-          }
-
-          return (
-            <CustomerNameForm
-              onSubmit={customerNameSubmit}
-              value={form.customerName}
-            />
-          );
-        })()}
-      </Dialog>
     </>
   );
 }

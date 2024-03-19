@@ -1,6 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "../components/Button";
+import { Container } from "../components/Container";
 import { Dialog } from "../components/Dialog";
 import { DateISOString } from "../components/forms/StartDateForm";
 import { usePersistedState } from "../hooks/persisted-state";
@@ -62,66 +63,85 @@ function Index() {
   }
 
   return (
-    <div className="p-2">
-      <h3>All cases!</h3>
+    <div className="pt-4">
+      <Container>
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold">All Cases</h1>
+        </div>
 
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <label>
-          <span>Upload file</span>
-          <br />
-          <input
-            type="file"
-            accept=".txt"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              const reader = new FileReader();
+        <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+          <label>
+            <span>Upload file</span>
+            <br />
+            <input
+              type="file"
+              accept=".txt"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                const reader = new FileReader();
 
-              reader.onload = function (event) {
-                const content = event.target?.result as string;
-                setCases(() => thisIsGonnaBeTalkedAbout(content));
-                setDialogOpen(false);
-              };
+                reader.onload = function (event) {
+                  const content = event.target?.result as string;
+                  setCases(() => thisIsGonnaBeTalkedAbout(content));
+                  setDialogOpen(false);
+                };
 
-              if (file) {
-                reader.readAsText(file);
-              }
-            }}
-          />
-        </label>
-      </Dialog>
+                if (file) {
+                  reader.readAsText(file);
+                }
+              }}
+            />
+          </label>
+        </Dialog>
 
-      <table className="mb-8">
-        <thead>
-          <tr>
-            <th className="py-2 px-4">Customer Name</th>
-            <th className="py-2 px-4">Start Date</th>
-            <th className="py-2 px-4">isFinished</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cases.map(({ customerName, startDate, isFinished }, i) => {
-            return (
-              <tr key={customerName + startDate + isFinished + i}>
-                <td className="py-2 px-4">{customerName}</td>
-                <td className="py-2 px-4">{formatGermanDate(startDate)}</td>
-                <td className="py-2 px-4">{isFinished ? "true" : "false"}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+        <div className="mb-8">
+          {!cases.length ? (
+            <p>No cases yet</p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th className="py-2 px-4">Customer Name</th>
+                  <th className="py-2 px-4">Start Date</th>
+                  <th className="py-2 px-4">isFinished</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cases.map(({ customerName, startDate, isFinished }, i) => {
+                  return (
+                    <tr key={customerName + startDate + isFinished + i}>
+                      <td className="py-2 px-4">{customerName}</td>
+                      <td className="py-2 px-4">
+                        {formatGermanDate(startDate)}
+                      </td>
+                      <td className="py-2 px-4">
+                        {isFinished ? "true" : "false"}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
+        </div>
 
-      <div className="flex gap-2">
-        <Button type="button" onClick={() => setCases([])}>
-          Delete all
-        </Button>
-        <Button type="button" onClick={download}>
-          Export
-        </Button>
-        <Button type="button" onClick={() => setDialogOpen(true)}>
-          Import
-        </Button>
-      </div>
+        <div className="flex gap-2">
+          {!cases?.length ? null : (
+            <>
+              <Button type="button" onClick={() => setCases([])}>
+                Delete all
+              </Button>
+              <Button type="button" onClick={download}>
+                Export
+              </Button>
+            </>
+          )}
+
+          <Button type="button" onClick={() => setDialogOpen(true)}>
+            Import
+          </Button>
+        </div>
+      </Container>
     </div>
   );
 }

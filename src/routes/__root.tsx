@@ -4,7 +4,7 @@ import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 export const Route = createRootRoute({
   component: () => (
     <>
-      <div className="p-2 flex gap-4">
+      <div className="p-4 flex gap-8">
         <Link to="/" className="[&.active]:font-bold">
           New case
         </Link>
